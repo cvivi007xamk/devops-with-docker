@@ -1,0 +1,25 @@
+% docker run -it ubuntu sh -c 'echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http://$website;'
+Input website:
+helsinki.fi
+Searching..
+sh: 1: curl: not found
+% docker ps -a
+CONTAINER ID   IMAGE     COMMAND                   CREATED          STATUS                        PORTS     NAMES
+e234fad9c775   ubuntu    "sh -c 'echo \"Input …"   26 seconds ago   Exited (127) 18 seconds ago             nostalgic_johnson
+% docker start e23
+e23
+% docker exec -it e23 bash
+root@e234fad9c775:/# apt update
+root@e234fad9c775:/# apt install curl
+root@e234fad9c775:/# echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http://$website;
+Input website:
+helsinki.fi
+Searching..
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>301 Moved Permanently</title>
+</head><body>
+<h1>Moved Permanently</h1>
+<p>The document has moved <a href="https://www.helsinki.fi/">here</a>.</p>
+</body></html>
+root@e234fad9c775:/#

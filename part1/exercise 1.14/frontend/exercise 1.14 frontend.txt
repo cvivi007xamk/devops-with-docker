@@ -1,0 +1,1 @@
+% docker build . -t example-frontend-nodejs && docker run -p 5000:5000 example-frontend-nodejs
