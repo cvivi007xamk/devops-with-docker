@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+    frontend:
+        image: example-frontend-nodejs
+        container_name: example-frontend-nodejs
+        ports:
+            - 5000:5000
+
+    backend:
+        image: example-backend
+        container_name: example-backend
+        ports:
+            - 8080:8080

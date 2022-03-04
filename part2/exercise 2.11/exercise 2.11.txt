@@ -1,0 +1,9 @@
+In this exercise I did a backend Node server for a React frontend that I'm working on as an exercise.
+
+The backend depends on a Postgres database that is also configured and run in Docker (through the docker-compose.yml file).
+
+The Postgres database has environment variables for user, password and database and the same information is passed to the backend by the DATABASE_URL environment variable.
+
+The node-modules folder is located in a docker volume as is the postgres database data. Also the project folder is linked to local machine with a volume so that changes made in the local machine project folder/files is transferred to the docker container and to the running app.
+
+The docker-compose.yml file and Dockerfile are quite similar to the example files as is the basic logic /architecture of the program (Node backend and React frontend).

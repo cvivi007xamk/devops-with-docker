@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+    dev-academy-docker-backend:
+        build: .
+        command: npm start
+        ports:
+            - 3001:3001
+        volumes:
+            - ./:/usr/src/app
+            - dev-academy-node_modules:/usr/src/app/node_modules
+        container_name: dev-academy-docker-backend
+        environment:
+            - DATABASE_URL=postgres://user1:Passw0rd@database:5432/farm_data
+        depends_on:
+            - database
+
+    database:
+        restart: unless-stopped
+        image: postgres
+        environment:
+            - POSTGRES_USER=user1
+            - POSTGRES_PASSWORD=Passw0rd
+            - POSTGRES_DB=farm_data
+        volumes:
+            - dev-academy-database:/var/lib/postgresql/data
+
+volumes:
+    dev-academy-node_modules:
+    dev-academy-database:
