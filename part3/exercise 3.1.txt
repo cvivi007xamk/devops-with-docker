@@ -1,0 +1,3 @@
+Repository at: https://github.com/cvivi007xamk/docker-hy-coursepage.git
+
+Heroku app at: https://docker-hy-coursepage.herokuapp.com 
