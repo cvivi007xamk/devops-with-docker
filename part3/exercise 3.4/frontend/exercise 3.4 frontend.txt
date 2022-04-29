@@ -1,0 +1,126 @@
+FROM ubuntu:18.04
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+RUN apt-get update && apt-get install -y curl 
+
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash
+
+RUN apt install -y nodejs
+
+COPY . .
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+RUN npm install
+
+RUN npm run build
+
+RUN npm install -g serve
+
+RUN useradd -m appuser
+
+RUN chown -R appuser /usr/src/app
+
+USER appuser
+
+CMD ["serve", "-s", "-l", "5000", "build"]
+
+
+% docker build . -t example-frontend
+
+% docker image history example-frontend
+
+IMAGE          CREATED             CREATED BY                                      SIZE      COMMENT
+5bd1479231fc   57 minutes ago      CMD ["serve" "-s" "-l" "5000" "build"]          0B        buildkit.dockerfile.v0
+<missing>      57 minutes ago      USER appuser                                    0B        buildkit.dockerfile.v0
+<missing>      57 minutes ago      RUN /bin/sh -c chown -R appuser /usr/src/app…   185MB     buildkit.dockerfile.v0
+<missing>      58 minutes ago      RUN /bin/sh -c useradd -m appuser # buildkit    402kB     buildkit.dockerfile.v0
+<missing>      58 minutes ago      RUN /bin/sh -c npm install -g serve # buildk…   5.74MB    buildkit.dockerfile.v0
+<missing>      58 minutes ago      RUN /bin/sh -c npm run build # buildkit         8.68MB    buildkit.dockerfile.v0
+<missing>      58 minutes ago      RUN /bin/sh -c npm install # buildkit           299MB     buildkit.dockerfile.v0
+<missing>      About an hour ago   ENV REACT_APP_BACKEND_URL=http://localhost:8…   0B        buildkit.dockerfile.v0
+<missing>      About an hour ago   COPY . . # buildkit                             719kB     buildkit.dockerfile.v0
+<missing>      About an hour ago   RUN /bin/sh -c apt install -y nodejs # build…   115MB     buildkit.dockerfile.v0
+<missing>      About an hour ago   RUN /bin/sh -c curl -sL https://deb.nodesour…   35.3MB    buildkit.dockerfile.v0
+<missing>      About an hour ago   RUN /bin/sh -c apt-get update && apt-get ins…   44.3MB    buildkit.dockerfile.v0
+<missing>      About an hour ago   WORKDIR /usr/src/app                            0B        buildkit.dockerfile.v0
+<missing>      About an hour ago   EXPOSE map[5000/tcp:{}]                         0B        buildkit.dockerfile.v0
+<missing>      5 days ago          /bin/sh -c #(nop)  CMD ["bash"]                 0B        
+<missing>      5 days ago          /bin/sh -c #(nop) ADD file:5c0ff944739f89669…   56.7MB   
+
+751.01 MB
+
+------------------------------------
+
+FROM ubuntu:18.04
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+RUN apt-get update && apt-get install -y curl && \
+ curl -sL https://deb.nodesource.com/setup_16.x | bash && \
+ apt install -y nodejs && \
+ npm install && \
+ npm run build && \
+ npm install -g serve && \
+ apt-get purge -y --auto-remove curl && \
+ rm -rf /var/lib/apt/lists/* && \
+ useradd -m appuser && \
+ chown -R appuser /usr/src/app
+
+USER appuser
+
+CMD ["serve", "-s", "-l", "5000", "build"]
+
+
+529.5 MB
+
+-------------------------------------------------
+
+FROM ubuntu:18.04
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+RUN apt-get update && apt-get install -y curl && \
+ curl -sL https://deb.nodesource.com/setup_16.x | bash && \
+ apt install -y nodejs && \
+ npm install && \
+ npm run build && \
+ npm install -g serve && \
+ apt-get purge -y --auto-remove curl && \
+ rm -rf /var/lib/apt/lists/* && \
+ rm -rf /usr/src/app/node_modules && \
+ useradd -m appuser && \
+ chown -R appuser /usr/src/app
+
+USER appuser
+
+CMD ["serve", "-s", "-l", "5000", "build"]
+
+
+IMAGE          CREATED              CREATED BY                                      SIZE      COMMENT
+2f979f5dc8ff   About a minute ago   CMD ["serve" "-s" "-l" "5000" "build"]          0B        buildkit.dockerfile.v0
+<missing>      About a minute ago   USER appuser                                    0B        buildkit.dockerfile.v0
+<missing>      About a minute ago   RUN /bin/sh -c apt-get update && apt-get ins…   290MB     buildkit.dockerfile.v0
+<missing>      31 minutes ago       ENV REACT_APP_BACKEND_URL=http://localhost:8…   0B        buildkit.dockerfile.v0
+<missing>      31 minutes ago       COPY . . # buildkit                             719kB     buildkit.dockerfile.v0
+<missing>      2 hours ago          WORKDIR /usr/src/app                            0B        buildkit.dockerfile.v0
+<missing>      2 hours ago          EXPOSE map[5000/tcp:{}]                         0B        buildkit.dockerfile.v0
+<missing>      5 days ago           /bin/sh -c #(nop)  CMD ["bash"]                 0B        
+<missing>      5 days ago           /bin/sh -c #(nop) ADD file:5c0ff944739f89669…   56.7MB   
+
+346.98 MB

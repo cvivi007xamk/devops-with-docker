@@ -1,0 +1,10 @@
+REPOSITORY         TAG       IMAGE ID       CREATED         SIZE
+example-frontend   latest    3748ed1afe7e   3 minutes ago   182MB
+example-backend    latest    b36f345e6c04   2 hours ago     156MB
+
+
+Multi stage
+
+REPOSITORY         TAG       IMAGE ID       CREATED          SIZE
+example-backend    latest    6f40da78e0ff   2 minutes ago    17.1MB
+example-frontend   latest    b05acc744c92   36 minutes ago   58.1MB

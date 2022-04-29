@@ -1,0 +1,66 @@
+% docker build . -t example-backend
+
+FROM golang:1.16
+
+EXPOSE 8080
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN go build 
+
+RUN go test ./...
+
+RUN useradd -m appuser
+
+ENV REQUEST_ORIGIN=http://localhost:5000
+
+USER appuser
+
+CMD ["./server"]
+
+934.46 MB
+
+--------------------------------------------------
+
+FROM ubuntu:18.04
+
+EXPOSE 8080 
+
+WORKDIR /usr/src/app
+
+ENV REQUEST_ORIGIN=http://localhost:5000
+
+ENV PATH=$PATH:/usr/local/go/bin
+
+COPY . .
+
+RUN apt-get update &&  apt-get install -y \
+    wget && \
+    wget https://dl.google.com/go/go1.16.15.linux-arm64.tar.gz && \
+    rm -rf /usr/local/go && tar -C /usr/local -xzf go1.16.15.linux-arm64.tar.gz && \
+    rm -rf go1.16.15.linux-arm64.tar.gz && \
+    apt-get purge -y --auto-remove wget && \
+    rm -rf /var/lib/apt/lists/* && \
+    go build && \
+    useradd -m appuser
+    
+USER appuser
+
+CMD ["./server"]
+
+
+IMAGE          CREATED          CREATED BY                                      SIZE      COMMENT
+58cffd7ef25f   32 minutes ago   CMD ["./server"]                                0B        buildkit.dockerfile.v0
+<missing>      32 minutes ago   USER appuser                                    0B        buildkit.dockerfile.v0
+<missing>      32 minutes ago   RUN /bin/sh -c apt-get update &&  apt-get in…   435MB     buildkit.dockerfile.v0
+<missing>      41 minutes ago   COPY . . # buildkit                             34.8kB    buildkit.dockerfile.v0
+<missing>      16 hours ago     ENV PATH=/usr/local/sbin:/usr/local/bin:/usr…   0B        buildkit.dockerfile.v0
+<missing>      16 hours ago     ENV REQUEST_ORIGIN=http://localhost:5000        0B        buildkit.dockerfile.v0
+<missing>      16 hours ago     WORKDIR /usr/src/app                            0B        buildkit.dockerfile.v0
+<missing>      16 hours ago     EXPOSE map[8080/tcp:{}]                         0B        buildkit.dockerfile.v0
+<missing>      6 days ago       /bin/sh -c #(nop)  CMD ["bash"]                 0B        
+<missing>      6 days ago       /bin/sh -c #(nop) ADD file:5c0ff944739f89669…   56.7MB   
+
+492.19 MB

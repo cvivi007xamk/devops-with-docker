@@ -1,0 +1,89 @@
+FROM ubuntu:18.04
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+RUN apt-get update && apt-get install -y curl && \
+ curl -sL https://deb.nodesource.com/setup_16.x | bash && \
+ apt install -y nodejs && \
+ npm install && \
+ npm run build && \
+ npm install -g serve && \
+ apt-get purge -y --auto-remove curl && \
+ rm -rf /var/lib/apt/lists/* && \
+ rm -rf /usr/src/app/node_modules && \
+ useradd -m appuser && \
+ chown -R appuser /usr/src/app
+
+USER appuser
+
+CMD ["serve", "-s", "-l", "5000", "build"]
+
+
+IMAGE          CREATED              CREATED BY                                      SIZE      COMMENT
+2f979f5dc8ff   About a minute ago   CMD ["serve" "-s" "-l" "5000" "build"]          0B        buildkit.dockerfile.v0
+<missing>      About a minute ago   USER appuser                                    0B        buildkit.dockerfile.v0
+<missing>      About a minute ago   RUN /bin/sh -c apt-get update && apt-get ins…   290MB     buildkit.dockerfile.v0
+<missing>      31 minutes ago       ENV REACT_APP_BACKEND_URL=http://localhost:8…   0B        buildkit.dockerfile.v0
+<missing>      31 minutes ago       COPY . . # buildkit                             719kB     buildkit.dockerfile.v0
+<missing>      2 hours ago          WORKDIR /usr/src/app                            0B        buildkit.dockerfile.v0
+<missing>      2 hours ago          EXPOSE map[5000/tcp:{}]                         0B        buildkit.dockerfile.v0
+<missing>      5 days ago           /bin/sh -c #(nop)  CMD ["bash"]                 0B        
+<missing>      5 days ago           /bin/sh -c #(nop) ADD file:5c0ff944739f89669…   56.7MB   
+
+346.98 MB
+
+----------------------
+
+FROM alpine 
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+ENV LC_ALL=C.UTF-8
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+RUN apk add --no-cache nodejs npm && \
+    npm install && \
+    npm run build && \
+    npm install -g serve && \
+    rm -rf /usr/src/app/node_modules && \
+    adduser -D appuser && chown -R appuser /usr/src/app
+    
+USER appuser
+
+CMD ["serve", "-s", "-l", "5000", "build"]
+
+182.37 MB
+
+---------------------------
+
+FROM node:16-alpine
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+COPY . .
+
+RUN npm install && npm run build && npm install -g serve && \
+  adduser -D appuser && chown -R appuser /usr/src/app
+    
+USER appuser
+
+CMD ["serve", "-s", "-l", "5000", "build"]
+
+425.04 MB
+
+
